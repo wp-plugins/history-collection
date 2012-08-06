@@ -1,13 +1,13 @@
 <?php
 /*
-Plugin Name: history Collection
-Description: history Collection plugin with history sidebar widget helps you collect and display your history on your WordPress blog.
+Plugin Name: History Collection
+Description: History Collection plugin with history sidebar widget helps you collect and display your history on your WordPress blog.
 Version: 1.0.2
-Author: ionadas local LLC
-Author URI: http://www.ionadas.com/825/wordpress-plugin-history-collection/
+Author:ionadas local LLC
+Author URI: http://www.ionadas.com
 License: GPL2
 */
-/*  Copyright 2007-2012 
+/*  Copyright 2007-2011 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation; either version 2 of the License, or
@@ -200,7 +200,7 @@ function historycollection_install()
 			dateformat VARCHAR(255),
 			ordering VARCHAR(255),
 			role VARCHAR(255),
-			link enum('yes', 'no') DEFAULT 'no' NOT NULL,
+			link enum('yes', 'no') DEFAULT 'yes' NOT NULL,
 			PRIMARY KEY  (ID)
 		) {$db_charset} {$db_collate};";
 		$x=('F j, Y');

@@ -42,7 +42,7 @@ global $wpdb;
   $month2=date("M"); 
   $month3=date("F");
   $month4=date("m");
-  ?><p>This is just a test page for now. Real info is coming...</p><? global $wpdb;
+  ?><? global $wpdb;
      $select=mysql_query("SELECT * FROM ". $wpdb->prefix ."historysettings") or die(mysql_error());
 	 $row=mysql_fetch_array($select); 
 	 if($row['ordering']=='oldest to newest') {$order="ASC"; } else {$order="DESC";}
@@ -85,7 +85,8 @@ global $wpdb;
    }
 return ob_get_clean();}
 add_shortcode('todayhistory', 'todayhistory'); ?><? function monthlyhistory($atts)
-{ $condition="";
+{ob_start();
+$condition="";
 extract(shortcode_atts(array(
 		'tags' => ''
 	), $atts));
@@ -124,7 +125,7 @@ extract(shortcode_atts(array(
 	 $month2=date("M"); 
 	 $month3=date("F");
 	 $month4=date("m");
-     ?><p>This is just a test page for now. Real info is coming...</p><? global $wpdb;
+     ?><? global $wpdb;
      $select=mysql_query("SELECT * FROM ". $wpdb->prefix ."historysettings") or die(mysql_error());
 	 $row=mysql_fetch_array($select); if($row['ordering']=='oldest to newest') {$order="ASC"; } else {$order="DESC";}
 	 $sql = mysql_query("SELECT ID, title, description, day, month, year, tags, public FROM " . $wpdb->prefix . "historycollection WHERE (`month`='$month1' OR `month`='$month2' OR `month`='$month3' OR `month`='$month4' )$condition ORDER BY time_added ".$order );
@@ -166,9 +167,10 @@ extract(shortcode_atts(array(
                     }
           }?><? if($row['link']=='yes'){?><p>Monthly History WordPress Plugin by <a href="http://www.ionadas.com">ionadas local LLC</a></p><? }?><? }
   }
-}
+return ob_get_clean();}
 add_shortcode('monthlyhistory', 'monthlyhistory');?><? function fullhistory($atts)
-{ $condition="";
+{ob_start();
+$condition="";
 extract(shortcode_atts(array(
 		'tags' => ''
 	), $atts));
@@ -200,7 +202,7 @@ if($tags_condition) $condition .= " WHERE ".$tags_condition;	}
 		else
 		 {		  
 			 $pagenum=$_GET['pagenum'];
-		 }?><p>This is just a test page for now. Real info is coming...</p><? global $wpdb; 
+		 }?><? global $wpdb; 
           $select=mysql_query("SELECT * FROM ". $wpdb->prefix ."historysettings") or die(mysql_error());
 		  $row=mysql_fetch_array($select); if($row['ordering']=='oldest to newest') {$order="ASC"; } else {$order="DESC";}
 		  $sql = mysql_query("SELECT ID, title, description, day, month, year, tags, public FROM " . $wpdb->prefix . "historycollection $condition ORDER BY time_added ".$order );
@@ -240,9 +242,10 @@ if($tags_condition) $condition .= " WHERE ".$tags_condition;	}
                 }
 	    }?><? if($row['link']=='yes'){?><p>History WordPress Plugin by <a href="http://www.ionadas.com">ionadas local LLC</a></p><? }?><? }
   }
-}
+return ob_get_clean();}
 add_shortcode('fullhistory', 'fullhistory');?><? function weekhistory($atts)
-{$condition="";
+{ob_start();
+$condition="";
 extract(shortcode_atts(array(
 		'tags' => ''
 	), $atts));
@@ -280,14 +283,17 @@ if($tags_condition) $condition .= " AND (".$tags_condition.")";	}
  $month3=date("F");
  $month4=date("m");
  $WeekDayNumber = date('w');
- $WeekBegin = date("d",time() - ($WeekDayNumber - 1)*60*60*24);
-    for($i=0; $i<7; $i++)
-    {
-        $dates[$i] = $WeekBegin+$i;
-    }?><p>This is just a test page for now. Real info is coming...</p><? global $wpdb;
+ $x1 = date("d",time() - ($WeekDayNumber - 1)*60*60*24);
+ $x2=date("d",time() - ($WeekDayNumber - 1)*60*60*24+60*60*24);
+ $x3=date("d",time() - ($WeekDayNumber - 1)*60*60*24+2*60*60*24);
+ $x4=date("d",time() - ($WeekDayNumber - 1)*60*60*24+3*60*60*24);
+ $x5=date("d",time() - ($WeekDayNumber - 1)*60*60*24+4*60*60*24);
+ $x6=date("d",time() - ($WeekDayNumber - 1)*60*60*24+5*60*60*24);
+ $x7=date("d",time() - ($WeekDayNumber - 1)*60*60*24+6*60*60*24);
+    ?><? global $wpdb;
   $select=mysql_query("SELECT * FROM ". $wpdb->prefix ."historysettings") or die(mysql_error());
   $row=mysql_fetch_array($select); if($row['ordering']=='oldest to newest') {$order="ASC"; } else {$order="DESC";}
-  $sql = mysql_query("SELECT ID, title, description, day, month, year, tags, public FROM " . $wpdb->prefix . "historycollection WHERE (`day`='$dates[0]' OR `day`='$dates[1]' OR `day`='$dates[2]' OR `day`='$dates[3]' OR `day`='$dates[4]' OR `day`='$dates[5]' OR `day`='$dates[6]') AND (`month`='$month1' OR `month`='$month2' OR `month`='$month3' OR `month`='$month4' ) $condition ORDER BY time_added ".$order );
+  $sql = mysql_query("SELECT ID, title, description, day, month, year, tags, public FROM " . $wpdb->prefix . "historycollection WHERE (`day`='$x1' OR `day`='$x2' OR `day`='$x3' OR `day`='$x4' OR `day`='$x5' OR `day`='$x6' OR `day`='$x7') AND (`month`='$month1' OR `month`='$month2' OR `month`='$month3' OR `month`='$month4' ) $condition ORDER BY time_added ".$order );
    $n=mysql_num_rows($sql);
    $page_rows = 20; 
    $last = ceil($n/$page_rows);
@@ -301,11 +307,11 @@ if($tags_condition) $condition .= " AND (".$tags_condition.")";	}
 		 } 
 		$max = 'limit ' .($pagenum - 1) * $page_rows .',' .$page_rows; 
       if($n==0)
-		 {
+		 {print_r($dates);
 		   echo "<p>no history(s) were found</p> ";
 		 }
 		else
-		 {?><? $sql22 = mysql_query("SELECT ID, title, description, day, month, year, tags, public FROM " . $wpdb->prefix . "historycollection WHERE (`day`='$dates[0]' OR `day`='$dates[1]' OR `day`='$dates[2]' OR `day`='$dates[3]' OR `day`='$dates[4]' OR `day`='$dates[5]' OR `day`='$dates[6]') AND (`month`='$month1' OR `month`='$month2' OR `month`='$month3' OR `month`='$month4' ) $condition ORDER BY year ".$order.",month ".$order.",day ".$order." $max" );
+		 {?><? $sql22 = mysql_query("SELECT ID, title, description, day, month, year, tags, public FROM " . $wpdb->prefix . "historycollection WHERE (`day`='$x1' OR `day`='$x2' OR `day`='$x3' OR `day`='$x4' OR `day`='$x5' OR `day`='$x6' OR `day`='$x7') AND (`month`='$month1' OR `month`='$month2' OR `month`='$month3' OR `month`='$month4' ) $condition ORDER BY year ".$order.",month ".$order.",day ".$order." $max" );
 		 while($row1 = mysql_fetch_array($sql22))
 		  {?><h3><? if($row['dateformat']==('Y/m/d')){?><?=$row1['year']?>/<?=$row1['month']?>/<?=$row1['day']?><? } else?><? if($row['dateformat']==('m/d/Y')){?><?=$row1['month']?>/<?=$row1['day']?>/<?=$row1['year']?><? }else?><? if($row['dateformat']==('d/m/Y')){?><?=$row1['day']?>/<?=$row1['month']?>/<?=$row1['year']?><? }else?><? if($row['dateformat']==('F j, Y')){?><? echo date( 'F', mktime(0, 0, 0, $row1['month']) ) ?>&nbsp;<?=$row1['day']?>,&nbsp;<?=$row1['year']?><? }?></h3>
 				<strong><!--<a href="?act3=new3&id=<?=$row1['ID']?>">--><?=$row1['title']?><!--</a>--></strong>
@@ -323,5 +329,5 @@ if($tags_condition) $condition .= " AND (".$tags_condition.")";	}
                      }
 		 }?><? if($row['link']=='yes'){?><p>Weekly History WordPress Plugin by <a href="http://www.ionadas.com">ionadas local LLC</a></p><? }?><? }
  }
-}
+return ob_get_clean();}
 add_shortcode('weeklyhistory', 'weekhistory');?>

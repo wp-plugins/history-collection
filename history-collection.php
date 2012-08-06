@@ -2,9 +2,9 @@
 /*
 Plugin Name: history Collection
 Description: history Collection plugin with history sidebar widget helps you collect and display your history on your WordPress blog.
-Version: 1.0.1
+Version: 1.0.2
 Author: ionadas local LLC
-Author URI: http://www.ionadas.com
+Author URI: http://www.ionadas.com/825/wordpress-plugin-history-collection/
 License: GPL2
 */
 /*  Copyright 2007-2012 

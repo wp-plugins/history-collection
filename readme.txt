@@ -14,11 +14,7 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 History Collection plugin helps you collect and display daily historical entries on your WordPress blog. 
 
-
-
 == Description ==
-
-
 
 History Collection allows you to create a "Today in History" section on your site, inserted either through a shortcode or a sidebar widget.
 
@@ -70,7 +66,6 @@ Ordering of Multiple Listings: Determine how output is ordered when there is mor
 
 Link to Plugin Author?: Provide a much appreciated link to this plugin's author on your output.
 
-
 There is also the ability to make a PayPal donation to support the development of this plugin. Anything helps!
 
 = Shortcodes =
@@ -97,7 +92,6 @@ The output can be further limited using the variable "tags" within the shortcode
 
 = Widgets =
 
-
 Listings can also be outputted to a sidebar using the "History" widget. Simply drag the "History" widget to the desired sidebar, and choose your settings.
 
 Title: The headline for that section on the sidebar.
@@ -110,11 +104,7 @@ Show limit: Allows you to limit how many listings are displayed on a particular 
 
 Currently, you can't limit Widget output by tag, but this will be added in a future version.
 
-   
-
 For more information, visit the [plugin homepage](#). Please provide your feedback at the [WordPress support forums].
-
-
 
 = The [todayhistory] shortcode =
 
@@ -126,32 +116,41 @@ histories can be displayed in a page by placing the shortcode `[monthlyhistory]`
 
 histories can be displayed in a page by placing the shortcode `[fullhistory]`. This will display all the histories.
 
+= Import/Export =
+
+You can now upload and download CSV files of all your listings. We highly recommend that you occasionally download your listings so that you have a backup of them in case of a database crash. Simply go to the Import/Export screen, and download the history to get a datafile of all your listings.
+
+You can also upload a number of listings at once by downloading the Sample CSV file, populating it with history listing data, and then uploading it back into the system. Note: This will append to current listings, so if you upload the file you downloaded as a backup, you'll have a bunch of duplicate listings.
 
 == Screenshots ==
 
-
-
 1. Listings page - Previously entered listings
-
 2. Listings page - New listing data entry
-
 3. Settings Page
-
 4. Shortcode output on WordPress Page - No entries
-
 5. Shortcode output on WordPress Page - Sample entry
 6. Widget management
 7. Widget output
+8. Import/Export page
 
 == Frequently Asked Questions ==
 
-= Why are there no frequently asked questions? =
+= How can I replace all the listings in my database? =
 
-Because the plugin is new, and no one has asked anything yet.
+We decided not to add this as a function, as the risk of accidentally erasing everything was just too high. But there is a work around.
 
+Download your entire History from the database using the Import/Export screen. You can then load it into Excel to remove duplicates, find spelling errors, and so forth.
 
+Then, once you're ready to re-upload the listings, you can go to the Listings page and use the Bulk Action to erase your listings. Yes, if you have multiple screens of listings, this could still take a long time.
+
+Once they're all deleted, you can re-upload your CSV to get the listings back.
+
+Just be sure your CSV is ready to go. Once you delete them from the system, the only way to get them back will be to re-upload them. Be careful!
 
 == Changelog ==
+
+= 1.1.1 =
+Fixed a bug that added a slash to Titles that had an apostrophe, and added an import/export system.
 
 = 1.0.2 =
 Bug fix of an error in the shortcode display code.

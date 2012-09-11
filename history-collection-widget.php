@@ -7,9 +7,11 @@ function historycollection_widget_init()
 		$options = get_option('quotescollection');
 		$title = isset($options['title'])?apply_filters('the_title', $options['title']):__('History', 'quotes-collection');
 		$show_title = isset($options['show_title'])?$options['show_title']:1;
+		
 		$show_taag = isset($options['show_taag'])?$options['show_taag']:1;
 		$show_limit = isset($options['show_limit'])?$options['show_limit']:5;
 		$parms ="echo=0&show_title={$show_title}&show_taag={$show_taag}&show_limit={$show_limit}";
+		
 			extract($args);
 			echo $before_widget;
 			if($title) echo $before_title . $title . $after_title . "\n";

@@ -2,9 +2,9 @@
 /*
 Plugin Name: History Collection
 Description: History Collection plugin with history sidebar widget helps you collect and display your history on your WordPress blog.
-Version: 1.0.2
+Version: 1.1.1
 Author:ionadas local LLC
-Author URI: http://www.ionadas.com
+Author URI: http://www.ionadas.com/825/wordpress-plugin-history-collection/
 License: GPL2
 */
 /*  Copyright 2007-2011 
@@ -26,6 +26,7 @@ require_once('history-collection-widget.php');
 require_once('history-collection-admin.php');
 require_once('history-collection-shortcodes.php');
 require_once('history-settings.php');
+//include_once('export_data.php');
 
 function historycollection_count($condition = "")
 {
@@ -151,12 +152,12 @@ function historycollection_quote($args = '')
 	$display="";
 	$display .='<h3>'.$x.'</h3>';
 	if($options['show_title'] && $row2['title']){
-		$display .= '<span class="quotescollection_title"><strong>'. $row2['title'] .'</strong></span>';}
+		$display .= '<span class="quotescollection_title"><strong>'.stripslashes($row2['title']).'</strong></span>';}
 	$display .= "<p><q>".$row2['description'] ."</q>";
 	
 	if($options['show_taag']) {
 	if($row2['tags']){
-			$display .= '<br/>tags:<span class="quotescollection_source">'. $row2['tags'] .'</span></p>';
+			$display .= '<br/>tags:<span class="quotescollection_source">'.stripslashes($row2['tags']) .'</span></p>';
 			}else{$display .= '<br/>tags:none</p>';
                  }
 	}
@@ -165,6 +166,7 @@ function historycollection_quote($args = '')
 
 function historycollection_install()
 {
+	@mkdir('../upload_reports', 0777, true);
 	global $wpdb;
 	$table_name = $wpdb->prefix . "historycollection";
 	if(!defined('DB_CHARSET') || !($db_charset = DB_CHARSET))

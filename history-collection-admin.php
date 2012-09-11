@@ -6,8 +6,12 @@
 	$user_level=$row11['role']; 
 	global $quotescollection_admin_userlevel;
 	add_menu_page('History Collection', 'History', $user_level, 'history-collection', 'historycollection_quotes_management');
+	
 	$page_about1 = add_submenu_page( 'history-collection',__( ' Listings', 'history-collection' ), __( 'Listings', 'history-collection' ), $user_level , 'history-collection','historycollection_quotes_management' );
+	
 	$page_about2 = add_submenu_page( 'history-collection',__( ' Settings', 'history-collection' ), __( 'Settings', 'history-collection' ), $user_level , 'history-settings','history_html_page' );
+	
+	$page_about3 = add_submenu_page( 'history-collection',__( 'Import/Export', 'history-collection' ), __( 'Import/Export', 'history-collection' ), $user_level , 'history-import','history_import_page' );
      }
 add_action('admin_menu', 'historycollection_admin_menu');
 
@@ -310,9 +314,9 @@ function historycollection_quotes_management()
 		$quotes_list .= "<tr{$alternate}>";
 		$quotes_list .= "<th scope=\"row\" class=\"check-column\"><input type=\"checkbox\" name=\"bulkcheck[]\" value=\"".$quote_data->ID."\" /></th>";
 		$quotes_list .= "<td>" . $quote_data->ID . "</td>";
-		$quotes_list .= "<td>" . $quote_data->title . "</td>";
+		$quotes_list .= "<td>" . stripslashes($quote_data->title) . "</td>";
 		$quotes_list .= "<td>";
-		$quotes_list .= $quote_data->description;
+		$quotes_list .= stripslashes($quote_data->description);
     	$quotes_list .= "<div class=\"row-actions\"><span class=\"edit\"><a href=\"{$admin_url}&action=editquote&amp;id=".$quote_data->ID."\" class=\"edit\">".__('Edit', 'quotes-collection')."</a></span> | <span class=\"trash\"><a href=\"{$admin_url}&action=delquote&amp;id=".$quote_data->ID."\" onclick=\"return confirm( '".__('Are you sure you want to delete this history?', 'quotes-collection')."');\" class=\"delete\">".__('Delete', 'quotes-collection')."</a></span></div>";
 		$quotes_list .= "</td>";
 		$quotes_list .= "<td>" . make_clickable($quote_data->day) ."</td>";
@@ -381,6 +385,168 @@ function historycollection_quotes_management()
 	$display .= historycollection_editform();
 	$display .= "</div>";
 	echo $display;
+}
+function history_import_page()
+{	
+      if($_POST['submit'])
+	{  
+		extract($_POST);
+	
+			 $imagename = $_FILES['assignment_file']['name']; 
+			$temp=$_FILES['assignment_file']['name'];
+			$uploaddir =  "../upload_reports/"; 
+			$uploaddir1 = "../upload_reports/"; 
+			
+			 $uploadfile = $uploaddir . basename($_FILES['assignment_file']['name']);
+							
+			if (move_uploaded_file($_FILES['assignment_file']['tmp_name'], $uploadfile)) { 			
+			
+				$pos = strstr($temp,'.csv');
+							//echo $pos;
+							if(strstr($temp,'.csv'))
+							{		
+							
+		//$csvfile = mysql_query("insert into wp_historycollection(`file`,name,date,time) values('".$uploadfile."','".$imagename."',now(),'".time()."')");				 
+								$fp = fopen($uploaddir1.$temp , 'r');		
+														 
+										$c=0;
+										if (!fp)
+										$i=1;	
+																	 
+										while (($data = fgetcsv($fp, 1000, ",")) != FALSE) 
+										{	
+										
+																				
+											if($c!=0)
+											{
+			global $wpdb; 						
+	 $query = "INSERT INTO `".$wpdb->prefix."historycollection` (`title`, `description`, `day`, `month`, `year`, `tags`, `public`) VALUES ('".str_replace("'","`",$data[0])."','".str_replace("'","`",$data[1])."','".str_replace("'","`",$data[2])."','".str_replace("'","`",$data[3])."','".str_replace("'","`",$data[4])."','".str_replace("'","`",$data[5])."','".str_replace("'","`",$data[6])."')";
+		
+		mysql_query($query)or die(mysql_error());		 		 
+					
+					 }
+						$c++;
+												
+				 }
+				 
+			 echo "<p style='color:#FF0000; font-family:Arial, Helvetica, sans-serif; font-size:14px; text-align:center'>Data Successfully Imported</p>";  			
+				
+	 }
+else
+				 {
+				    echo "<p style='color:#FF0000; font-family:Arial, Helvetica, sans-serif; font-size:14px; text-align:center'>Please Upload only csv format files</p>"; 
+				 }	
+		  	}
+			
+		else 
+		
+		   {
+				echo "<p style='color:#FF0000; font-family:Arial, Helvetica, sans-serif; font-size:14px; text-align:center'>Error , File Not Uploaded</p>";
+		   }
+		   
+		   
+
+		   
+ }			
+     
+?>
+ 
+<script type="text/javascript">
+ 
+function function_call(username,password,prefix,dbname,dbhost)
+	{	
+		//alert("hello");
+		xmlHttp=GetXmlHttpObject_ajax();
+		Path='<?php echo plugins_url(); ?>/history-collection/export_data.php?username='+username+'&password='+password+'&prefix='+prefix+'&dbname='+dbname+'&dbhost='+dbhost; 
+		 // alert(Path);
+		xmlHttp.open("GET",Path,true);
+		xmlHttp.onreadystatechange=function() 
+		{
+			if (xmlHttp.readyState==4) 
+			{
+				ResponseData=xmlHttp.responseText;  
+				//alert(ResponseData);	
+				if(ResponseData){
+					//alert(ResponseData);
+					url = '<?php echo plugins_url(); ?>'+'/history-collection/export.csv';
+					window.location="<?php echo plugins_url(); ?>/history-collection/download.php?var=export.csv";
+					//window.open(url,'Download');
+				}			
+				//var res = ResponseData;
+			     
+				 				 				
+			} 
+		}
+		xmlHttp.send(null); 		 
+	}
+
+function GetXmlHttpObject_ajax()
+	{
+		var xmlHttp=null;
+		try
+			{
+				// Firefox, Opera 8.0+, Safari
+				xmlHttp=new XMLHttpRequest();
+			}
+		catch (e)
+			{
+				//Internet Explorer
+				try
+				  {
+					 xmlHttp=new ActiveXObject("Msxml2.XMLHTTP");
+				  }
+				catch (e)
+				  {
+					 xmlHttp=new ActiveXObject("Microsoft.XMLHTTP");
+				  }
+			}
+		return xmlHttp;	
+	}
+</script>
+
+	<form name="import" id="import" method="post" enctype="multipart/form-data">
+	
+	<table border="0" cellpadding="2" cellspacing="2">
+	<tr>
+                <td align="left"><div class="wrap"><h2>History Collection &raquo; Import/Export</h2></div></td>
+              </tr>
+	          <tr>
+                <td align="left"></td>
+              </tr><tr>
+                <td align="left"></td>
+              </tr><tr>
+                <td align="left"></td>
+              </tr><tr>
+                <td align="left"></td>
+              </tr><tr>
+                <td align="left">Upload Csv File Here (Please use sample csv file format)</td>
+              </tr>
+             
+              <tr>
+                <td align="left"><input type="file" name="assignment_file" id="assignment_file"/></td>
+              </tr>
+              <tr>
+                <td align="left">
+				
+				<input type='submit'  name='submit' value='Upload' class="submitbt2">
+                </td>
+              </tr>
+			   <tr>
+                <td align="left"><a href="<?php echo plugins_url();?>/history-collection/sample.csv">Download Sample csv File</a></td>
+              </tr>
+			  <tr>
+                <td align="left">
+				 
+				<?php /*?><a href="<?php echo plugins_url(); ?>/history-collection/export_data.php">Export</a><?php */?>
+				
+				<?php global $wpdb;?>
+				 <a href="javascript://" onclick="function_call('<?php echo $wpdb->dbuser?>','<?php echo $wpdb->dbpassword?>','<?php echo $wpdb->prefix?>','<?php echo $wpdb->dbname?>','<?php echo $wpdb->dbhost?>');" >Download History</a>
+				 
+                </td>
+              </tr>
+            </table>
+	</form>
+		<?
 }
 function historycollection_admin_footer()
 {

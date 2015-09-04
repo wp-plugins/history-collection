@@ -25,7 +25,7 @@ if(!$_GET['act1'] && !$_GET['act2'] && !$_GET['act3'] && !$_GET['act4'])
 global $wpdb; 
 	if($_GET['act']=='new') 
 	    { 
-		        $select=mysql_query("SELECT * FROM ". $wpdb->prefix ."historycollection WHERE ID=".$_GET['id']) or die(mysql_error());
+		        $select=mysql_query("SELECT * FROM ". $wpdb->prefix ."historycollection WHERE ID=".mysql_real_escape_string($_GET['id'])) or die(mysql_error());
 				$row=mysql_fetch_array($select);?> <p><strong><? echo stripslashes($row['title']);?></strong></p><p><? echo stripslashes($row['description']);?></p><span style="float:left">
 				tags:<? if($row['tags']) {?><? echo stripslashes($row['tags']);}else { echo "none";}?></span><? }
     else{if (!(isset($_GET['pagenum']))) 
@@ -109,7 +109,7 @@ extract(shortcode_atts(array(
       global $wpdb; 
 	  if($_GET['act1']=='new1') 
 	    {   
-		     $select=mysql_query("SELECT * FROM ". $wpdb->prefix ."historycollection WHERE ID=".$_GET['id']) or die(mysql_error());
+		     $select=mysql_query("SELECT * FROM ". $wpdb->prefix ."historycollection WHERE ID=".mysql_real_escape_string($_GET['id'])) or die(mysql_error());
 			 $row=mysql_fetch_array($select);?><p><strong><? echo stripslashes($row['title']);?></strong></p><p><? echo stripslashes($row['description']);?></p><span style="float:left">
 			 tags:<? if($row['tags']) {?><? echo stripslashes($row['tags']);}else { echo "none";}?></span><? }
       else{
@@ -192,7 +192,7 @@ if($tags_condition) $condition .= " WHERE ".$tags_condition;	}
      global $wpdb; 
 	 if($_GET['act2']=='new2')
 	  { 
-	    $select=mysql_query("SELECT * FROM ". $wpdb->prefix ."historycollection WHERE ID=".$_GET['id']) or die(mysql_error());
+	    $select=mysql_query("SELECT * FROM ". $wpdb->prefix ."historycollection WHERE ID=".mysql_real_escape_string($_GET['id'])) or die(mysql_error());
 		$row=mysql_fetch_array($select);?><p><strong><? echo $row['title'];?></strong></p><p><? echo $row['description'];?></p><span style="float:left">
 		tags:<? if($row['tags']) {?><? echo stripslashes($row['tags']);}else { echo "none";}?></span><? }
  else{ if (!(isset($_GET['pagenum']))) 
@@ -267,7 +267,7 @@ if($tags_condition) $condition .= " AND (".$tags_condition.")";	}
       global $wpdb; 
 	  if($_GET['act3']=='new3') 
 	  { 
-	       $select=mysql_query("SELECT * FROM ". $wpdb->prefix ."historycollection WHERE ID=".$_GET['id']) or die(mysql_error());
+	       $select=mysql_query("SELECT * FROM ". $wpdb->prefix ."historycollection WHERE ID=".mysql_real_escape_string($_GET['id'])) or die(mysql_error());
 		   $row=mysql_fetch_array($select);?><p><strong><? echo $row['title'];?></strong></p><p><? echo stripslashes($row['description']);?></p><span style="float:left">
 		   tags:<? if($row['tags']) {?><? echo stripslashes($row['tags']);}else { echo "none";}?></span><? }
     else{if (!(isset($_GET['pagenum']))) 
